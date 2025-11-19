@@ -4,6 +4,7 @@ import 'package:adventure/ui/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../main/menu.dart';
 import '../ui/scaffold.dart';
 import '../theme.dart';
 import '../main/auth_providers.dart';
@@ -30,6 +31,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> login() async {
     if (formKey.currentState!.validate()) {
       final messenger = ScaffoldMessenger.of(context);
+      final navigator = Navigator.of(context);
       final email = emailController.text;
       final password = passwordController.text;
       final error = await ref
@@ -39,7 +41,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         messenger.showSnackBar(
           SnackBar(content: Text(error)),
         );
+        return;
       }
+      navigator.pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const MainMenuScreen(),
+        ),
+      );
     }
   }
 

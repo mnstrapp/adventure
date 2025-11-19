@@ -40,4 +40,18 @@ class SessionNotifier extends Notifier<Session?> {
       return e.toString();
     }
   }
+
+  Future<String?> logout() async {
+    final client = adventurers.SessionServiceClient(createGrpcChannel());
+    try {
+      await client.logout(adventurers.LogoutRequest(token: state!.token));
+      await LocalStore.clearSession();
+      state = null;
+      _session = null;
+      return null;
+    } catch (e) {
+      debugPrint('Failed to logout: $e');
+      return e.toString();
+    }
+  }
 }

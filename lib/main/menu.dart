@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../ui/scaffold.dart';
 import '../ui/button.dart';
 import '../main/login.dart';
+import '../main/auth_providers.dart';
 
-class MainMenuScreen extends StatelessWidget {
+class MainMenuScreen extends ConsumerWidget {
   const MainMenuScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final size = MediaQuery.sizeOf(context);
+    final session = ref.watch(sessionProvider);
 
     return UiScaffold(
       child: Stack(
@@ -74,18 +77,27 @@ class MainMenuScreen extends StatelessWidget {
                   icon: Icons.person_add,
                   onPressed: () {},
                 ),
-                UiButton(
-                  text: 'Login',
-                  icon: Icons.login,
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                    );
-                  },
-                ),
+                if (session == null)
+                  UiButton(
+                    text: 'Login',
+                    icon: Icons.login,
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                if (session != null)
+                  UiButton(
+                    text: 'Logout',
+                    icon: Icons.logout,
+                    onPressed: () async {
+                      await ref.read(sessionProvider.notifier).logout();
+                    },
+                  ),
               ],
             ),
           ),

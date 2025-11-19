@@ -18,4 +18,9 @@ class LocalStore {
     final session = prefs.getString(LocalStoreKey.session.name);
     return session != null ? Session.fromJson(jsonDecode(session)) : null;
   }
+
+  static Future<void> clearSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(LocalStoreKey.session.name);
+  }
 }
