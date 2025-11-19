@@ -54,5 +54,5 @@ Opening a new terminal or sourcing your rc will load it into the path.
 To generate the client code you need to compile the protobufs. That can be done with this in your terminal:
 
 ```
-protoc --dart_out=grpc:lib/generated -Iadventure_proto adventure_proto/*.proto
+protoc --dart_out=grpc:lib/proto -Iadventure_proto adventure_proto/*.proto
 ```
