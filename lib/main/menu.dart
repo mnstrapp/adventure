@@ -5,6 +5,7 @@ import '../ui/scaffold.dart';
 import '../ui/button.dart';
 import '../main/login.dart';
 import '../main/auth_providers.dart';
+import 'register.dart';
 
 class MainMenuScreen extends ConsumerWidget {
   const MainMenuScreen({super.key});
@@ -67,17 +68,7 @@ class MainMenuScreen extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               spacing: 8,
               children: [
-                UiButton(
-                  text: 'Play',
-                  icon: Icons.play_arrow,
-                  onPressed: () {},
-                ),
-                UiButton(
-                  text: 'Join',
-                  icon: Icons.person_add,
-                  onPressed: () {},
-                ),
-                if (session == null)
+                if (session == null) ...[
                   UiButton(
                     text: 'Login',
                     icon: Icons.login,
@@ -90,6 +81,19 @@ class MainMenuScreen extends ConsumerWidget {
                       );
                     },
                   ),
+                  UiButton(
+                    text: 'Register',
+                    icon: Icons.person_add,
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
                 if (session != null)
                   UiButton(
                     text: 'Logout',

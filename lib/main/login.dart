@@ -28,15 +28,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
   }
 
+  String? validEmail(String? email) {
+    if (email == null || email.isEmpty) {
+      return 'Email is required';
+    }
+    final emailRegex = RegExp(
+      r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$",
+    );
+    if (!emailRegex.hasMatch(email)) {
+      return 'Enter a valid email address';
+    }
+    return null;
+  }
+
+  String? validPassword(String? password) {
+    if (password == null || password.isEmpty) {
+      return 'Password is required';
+    }
+    return null;
+  }
+
   Future<void> login() async {
     if (formKey.currentState!.validate()) {
       final messenger = ScaffoldMessenger.of(context);
       final navigator = Navigator.of(context);
       final email = emailController.text;
       final password = passwordController.text;
-      final error = await ref
+      final (_, error) = await ref
           .read(sessionProvider.notifier)
-          .login(email, password);
+          .login(email: email, password: password);
       if (error != null) {
         messenger.showSnackBar(
           SnackBar(content: Text(error)),
@@ -124,18 +144,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               decoration: InputDecoration(
                                 labelText: 'Email',
                               ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Email is required';
-                                }
-                                final emailRegex = RegExp(
-                                  r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$",
-                                );
-                                if (!emailRegex.hasMatch(value)) {
-                                  return 'Enter a valid email address';
-                                }
-                                return null;
-                              },
+                              validator: validEmail,
                             ),
                             TextFormField(
                               controller: passwordController,
@@ -151,12 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 ),
                               ),
                               obscureText: !isPasswordVisible,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Password is required';
-                                }
-                                return null;
-                              },
+                              validator: validPassword,
                             ),
                             Align(
                               alignment: Alignment.centerRight,

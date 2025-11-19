@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../proto/session.pbgrpc.dart' as adventurers;
 import '../models/session.dart';
+import '../models/user.dart';
 import '../utils/grpc.dart';
 import '../utils/local_store.dart';
 
@@ -20,7 +21,10 @@ class SessionNotifier extends Notifier<Session?> {
     return _session;
   }
 
-  Future<String?> login(String email, String password) async {
+  Future<(Session?, String?)> login({
+    required String email,
+    required String password,
+  }) async {
     final client = adventurers.SessionServiceClient(createGrpcChannel());
 
     try {
@@ -33,11 +37,11 @@ class SessionNotifier extends Notifier<Session?> {
       await LocalStore.setSession(session);
       _session = session;
 
-      return null;
+      return (session, null);
     } catch (e) {
       debugPrint('Failed to login: $e');
 
-      return e.toString();
+      return (null, e.toString());
     }
   }
 
@@ -52,6 +56,28 @@ class SessionNotifier extends Notifier<Session?> {
     } catch (e) {
       debugPrint('Failed to logout: $e');
       return e.toString();
+    }
+  }
+
+  Future<(User?, String?)> register({
+    required String displayName,
+    required String email,
+    required String password,
+  }) async {
+    final client = adventurers.SessionServiceClient(createGrpcChannel());
+    try {
+      final response = await client.register(
+        adventurers.RegisterRequest(
+          displayName: displayName,
+          email: email,
+          password: password,
+        ),
+      );
+      final user = User.fromGRPC(response.user);
+      return (user, null);
+    } catch (e) {
+      debugPrint('Failed to register: $e');
+      return (null, e.toString());
     }
   }
 }
