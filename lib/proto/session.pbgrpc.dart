@@ -53,6 +53,27 @@ class SessionServiceClient extends $grpc.Client {
     return $createUnaryCall(_$logout, request, options: options);
   }
 
+  $grpc.ResponseFuture<$0.ForgotPasswordResponse> forgotPassword(
+    $0.ForgotPasswordRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$forgotPassword, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ResetPasswordResponse> resetPassword(
+    $0.ResetPasswordRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$resetPassword, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.VerifyEmailResponse> verifyEmail(
+    $0.VerifyEmailRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$verifyEmail, request, options: options);
+  }
+
   // method descriptors
 
   static final _$register =
@@ -69,6 +90,21 @@ class SessionServiceClient extends $grpc.Client {
           '/adventurers.SessionService/Logout',
           ($0.LogoutRequest value) => value.writeToBuffer(),
           $0.LogoutResponse.fromBuffer);
+  static final _$forgotPassword =
+      $grpc.ClientMethod<$0.ForgotPasswordRequest, $0.ForgotPasswordResponse>(
+          '/adventurers.SessionService/ForgotPassword',
+          ($0.ForgotPasswordRequest value) => value.writeToBuffer(),
+          $0.ForgotPasswordResponse.fromBuffer);
+  static final _$resetPassword =
+      $grpc.ClientMethod<$0.ResetPasswordRequest, $0.ResetPasswordResponse>(
+          '/adventurers.SessionService/ResetPassword',
+          ($0.ResetPasswordRequest value) => value.writeToBuffer(),
+          $0.ResetPasswordResponse.fromBuffer);
+  static final _$verifyEmail =
+      $grpc.ClientMethod<$0.VerifyEmailRequest, $0.VerifyEmailResponse>(
+          '/adventurers.SessionService/VerifyEmail',
+          ($0.VerifyEmailRequest value) => value.writeToBuffer(),
+          $0.VerifyEmailResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('adventurers.SessionService')
@@ -97,6 +133,33 @@ abstract class SessionServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.LogoutRequest.fromBuffer(value),
         ($0.LogoutResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ForgotPasswordRequest,
+            $0.ForgotPasswordResponse>(
+        'ForgotPassword',
+        forgotPassword_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.ForgotPasswordRequest.fromBuffer(value),
+        ($0.ForgotPasswordResponse value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.ResetPasswordRequest, $0.ResetPasswordResponse>(
+            'ResetPassword',
+            resetPassword_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.ResetPasswordRequest.fromBuffer(value),
+            ($0.ResetPasswordResponse value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.VerifyEmailRequest, $0.VerifyEmailResponse>(
+            'VerifyEmail',
+            verifyEmail_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.VerifyEmailRequest.fromBuffer(value),
+            ($0.VerifyEmailResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.RegisterResponse> register_Pre($grpc.ServiceCall $call,
@@ -122,4 +185,30 @@ abstract class SessionServiceBase extends $grpc.Service {
 
   $async.Future<$0.LogoutResponse> logout(
       $grpc.ServiceCall call, $0.LogoutRequest request);
+
+  $async.Future<$0.ForgotPasswordResponse> forgotPassword_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.ForgotPasswordRequest> $request) async {
+    return forgotPassword($call, await $request);
+  }
+
+  $async.Future<$0.ForgotPasswordResponse> forgotPassword(
+      $grpc.ServiceCall call, $0.ForgotPasswordRequest request);
+
+  $async.Future<$0.ResetPasswordResponse> resetPassword_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.ResetPasswordRequest> $request) async {
+    return resetPassword($call, await $request);
+  }
+
+  $async.Future<$0.ResetPasswordResponse> resetPassword(
+      $grpc.ServiceCall call, $0.ResetPasswordRequest request);
+
+  $async.Future<$0.VerifyEmailResponse> verifyEmail_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.VerifyEmailRequest> $request) async {
+    return verifyEmail($call, await $request);
+  }
+
+  $async.Future<$0.VerifyEmailResponse> verifyEmail(
+      $grpc.ServiceCall call, $0.VerifyEmailRequest request);
 }

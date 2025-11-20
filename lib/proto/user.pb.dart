@@ -14,6 +14,9 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'mnstr.pb.dart' as $0;
+import 'wallet.pb.dart' as $1;
+
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 class User extends $pb.GeneratedMessage {
@@ -21,11 +24,26 @@ class User extends $pb.GeneratedMessage {
     $core.String? id,
     $core.String? displayName,
     $core.String? email,
+    $core.String? phone,
+    $core.int? experienceLevel,
+    $core.int? experiencePoints,
+    $core.int? experienceToNextLevel,
+    $core.int? coins,
+    $core.Iterable<$0.Mnstr>? mnstrs,
+    $1.Wallet? wallet,
   }) {
     final result = create();
     if (id != null) result.id = id;
     if (displayName != null) result.displayName = displayName;
     if (email != null) result.email = email;
+    if (phone != null) result.phone = phone;
+    if (experienceLevel != null) result.experienceLevel = experienceLevel;
+    if (experiencePoints != null) result.experiencePoints = experiencePoints;
+    if (experienceToNextLevel != null)
+      result.experienceToNextLevel = experienceToNextLevel;
+    if (coins != null) result.coins = coins;
+    if (mnstrs != null) result.mnstrs.addAll(mnstrs);
+    if (wallet != null) result.wallet = wallet;
     return result;
   }
 
@@ -45,6 +63,15 @@ class User extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'displayName')
     ..aOS(3, _omitFieldNames ? '' : 'email')
+    ..aOS(4, _omitFieldNames ? '' : 'phone')
+    ..aI(5, _omitFieldNames ? '' : 'experienceLevel')
+    ..aI(6, _omitFieldNames ? '' : 'experiencePoints')
+    ..aI(7, _omitFieldNames ? '' : 'experienceToNextLevel')
+    ..aI(8, _omitFieldNames ? '' : 'coins')
+    ..pPM<$0.Mnstr>(9, _omitFieldNames ? '' : 'mnstrs',
+        subBuilder: $0.Mnstr.create)
+    ..aOM<$1.Wallet>(10, _omitFieldNames ? '' : 'wallet',
+        subBuilder: $1.Wallet.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -91,6 +118,65 @@ class User extends $pb.GeneratedMessage {
   $core.bool hasEmail() => $_has(2);
   @$pb.TagNumber(3)
   void clearEmail() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get phone => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set phone($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasPhone() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPhone() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get experienceLevel => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set experienceLevel($core.int value) => $_setSignedInt32(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasExperienceLevel() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearExperienceLevel() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get experiencePoints => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set experiencePoints($core.int value) => $_setSignedInt32(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasExperiencePoints() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearExperiencePoints() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.int get experienceToNextLevel => $_getIZ(6);
+  @$pb.TagNumber(7)
+  set experienceToNextLevel($core.int value) => $_setSignedInt32(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasExperienceToNextLevel() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearExperienceToNextLevel() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.int get coins => $_getIZ(7);
+  @$pb.TagNumber(8)
+  set coins($core.int value) => $_setSignedInt32(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasCoins() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCoins() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $pb.PbList<$0.Mnstr> get mnstrs => $_getList(8);
+
+  @$pb.TagNumber(10)
+  $1.Wallet get wallet => $_getN(9);
+  @$pb.TagNumber(10)
+  set wallet($1.Wallet value) => $_setField(10, value);
+  @$pb.TagNumber(10)
+  $core.bool hasWallet() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearWallet() => $_clearField(10);
+  @$pb.TagNumber(10)
+  $1.Wallet ensureWallet() => $_ensure(9);
 }
 
 const $core.bool _omitFieldNames =
