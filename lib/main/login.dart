@@ -8,6 +8,7 @@ import '../main/menu.dart';
 import '../ui/scaffold.dart';
 import '../theme.dart';
 import '../main/auth_providers.dart';
+import 'register.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -162,24 +163,71 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               obscureText: !isPasswordVisible,
                               validator: validPassword,
                             ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 16.0),
-                                child: UiButton(
-                                  text: 'Login',
-                                  icon: Icons.login,
-                                  onPressed: () async {
-                                    if (formKey.currentState!.validate()) {
-                                      await login();
-                                    }
-                                  },
-                                ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton.icon(
+                                    icon: const Icon(Icons.cancel),
+                                    label: const Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MainMenuScreen(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  UiButton(
+                                    text: 'Login',
+                                    icon: Icons.login,
+                                    onPressed: () async {
+                                      if (formKey.currentState!.validate()) {
+                                        await login();
+                                      }
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        TextButton.icon(
+                          icon: const Icon(Icons.lock),
+                          label: const Text('Forgot password?'),
+                          style: TextButton.styleFrom(
+                            foregroundColor:
+                                theme.colorScheme.onPrimaryContainer,
+                          ),
+                          onPressed: () {
+                            // TODO: Implement forgot password functionality
+                          },
+                        ),
+                        UiButton.secondary(
+                          text: 'Register',
+                          icon: Icons.person_add,
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ],
