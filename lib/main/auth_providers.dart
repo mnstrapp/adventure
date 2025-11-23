@@ -59,7 +59,7 @@ class SessionNotifier extends Notifier<Session?> {
     }
   }
 
-  Future<(User?, String?)> register({
+  Future<(bool, String?)> register({
     required String displayName,
     required String email,
     required String password,
@@ -73,11 +73,27 @@ class SessionNotifier extends Notifier<Session?> {
           password: password,
         ),
       );
-      final user = User.fromGRPC(response.user);
-      return (user, null);
+      final success = response.success;
+      return (success, null);
     } catch (e) {
       debugPrint('Failed to register: $e');
-      return (null, e.toString());
+      return (false, e.toString());
+    }
+  }
+
+  Future<(bool, String?)> verifyEmail({
+    required String code,
+  }) async {
+    final client = adventurers.SessionServiceClient(createGrpcChannel());
+    try {
+      final response = await client.verifyEmail(
+        adventurers.VerifyEmailRequest(code: code),
+      );
+      final success = response.success;
+      return (success, null);
+    } catch (e) {
+      debugPrint('Failed to verify email: $e');
+      return (false, e.toString());
     }
   }
 }

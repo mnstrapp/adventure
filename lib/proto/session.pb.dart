@@ -110,10 +110,10 @@ class RegisterRequest extends $pb.GeneratedMessage {
 
 class RegisterResponse extends $pb.GeneratedMessage {
   factory RegisterResponse({
-    $1.User? user,
+    $core.bool? success,
   }) {
     final result = create();
-    if (user != null) result.user = user;
+    if (success != null) result.success = success;
     return result;
   }
 
@@ -130,7 +130,7 @@ class RegisterResponse extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'RegisterResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'adventurers'),
       createEmptyInstance: create)
-    ..aOM<$1.User>(1, _omitFieldNames ? '' : 'user', subBuilder: $1.User.create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -153,15 +153,13 @@ class RegisterResponse extends $pb.GeneratedMessage {
   static RegisterResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $1.User get user => $_getN(0);
+  $core.bool get success => $_getBF(0);
   @$pb.TagNumber(1)
-  set user($1.User value) => $_setField(1, value);
+  set success($core.bool value) => $_setBool(0, value);
   @$pb.TagNumber(1)
-  $core.bool hasUser() => $_has(0);
+  $core.bool hasSuccess() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUser() => $_clearField(1);
-  @$pb.TagNumber(1)
-  $1.User ensureUser() => $_ensure(0);
+  void clearSuccess() => $_clearField(1);
 }
 
 class Session extends $pb.GeneratedMessage {

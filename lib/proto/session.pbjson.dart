@@ -38,21 +38,13 @@ final $typed_data.Uint8List registerRequestDescriptor = $convert.base64Decode(
 const RegisterResponse$json = {
   '1': 'RegisterResponse',
   '2': [
-    {
-      '1': 'user',
-      '3': 1,
-      '4': 1,
-      '5': 11,
-      '6': '.adventurers.User',
-      '10': 'user'
-    },
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
   ],
 };
 
 /// Descriptor for `RegisterResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List registerResponseDescriptor = $convert.base64Decode(
-    'ChBSZWdpc3RlclJlc3BvbnNlEiUKBHVzZXIYASABKAsyES5hZHZlbnR1cmVycy5Vc2VyUgR1c2'
-    'Vy');
+    'ChBSZWdpc3RlclJlc3BvbnNlEhgKB3N1Y2Nlc3MYASABKAhSB3N1Y2Nlc3M=');
 
 @$core.Deprecated('Use sessionDescriptor instead')
 const Session$json = {

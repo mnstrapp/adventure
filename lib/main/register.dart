@@ -21,7 +21,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final verifyCodeController = TextEditingController();
+
+  final displayNameFocusNode = FocusNode();
+  final verifyCodeFocusNode = FocusNode();
+
   bool isPasswordVisible = false;
+  bool isVerifyCodeVisible = false;
+
   final formKey = GlobalKey<FormState>();
 
   void togglePasswordVisibility() {
@@ -70,14 +77,38 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     return null;
   }
 
+  String? validVerifyCode(String? verifyCode) {
+    if (verifyCode == null || verifyCode.isEmpty) {
+      return 'Verify code is required';
+    }
+    return null;
+  }
+
+  Future<void> verifyCode() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final verifyCode = verifyCodeController.text;
+    final (user, error) = await ref
+        .read(sessionProvider.notifier)
+        .verifyEmail(code: verifyCode);
+    if (error != null) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(error.toString())),
+      );
+      return;
+    }
+    navigator.pushReplacement(
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
+  }
+
   Future<void> register() async {
     if (formKey.currentState!.validate()) {
       final messenger = ScaffoldMessenger.of(context);
-      final navigator = Navigator.of(context);
       final displayName = displayNameController.text;
       final email = emailController.text;
       final password = passwordController.text;
-      final (user, error) = await ref
+      final (success, error) = await ref
           .read(sessionProvider.notifier)
           .register(
             displayName: displayName,
@@ -90,19 +121,30 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         );
         return;
       }
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            '${user?.displayName ?? 'User'} registered successfully',
-          ),
-        ),
-      );
-      navigator.pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const LoginScreen(),
-        ),
-      );
+      if (success) {
+        setState(() {
+          isVerifyCodeVisible = true;
+          verifyCodeController.clear();
+          verifyCodeFocusNode.requestFocus();
+        });
+      }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    displayNameFocusNode.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    displayNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    verifyCodeController.dispose();
+    super.dispose();
   }
 
   @override
@@ -165,72 +207,138 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Register', style: theme.textTheme.displaySmall),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Form(
-                        key: formKey,
+                  if (!isVerifyCodeVisible) ...[
+                    Text('Register', style: theme.textTheme.displaySmall),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: displayNameController,
+                                focusNode: displayNameFocusNode,
+                                decoration: InputDecoration(
+                                  labelText: 'Display Name',
+                                ),
+                                validator: validDisplayName,
+                                onEditingComplete: () {
+                                  if (formKey.currentState!.validate()) {
+                                    register();
+                                  }
+                                },
+                              ),
+                              TextFormField(
+                                controller: emailController,
+                                decoration: InputDecoration(
+                                  labelText: 'Email',
+                                ),
+                                validator: validEmail,
+                                onEditingComplete: () {
+                                  if (formKey.currentState!.validate()) {
+                                    register();
+                                  }
+                                },
+                              ),
+                              TextFormField(
+                                controller: passwordController,
+                                decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  suffixIcon: IconButton(
+                                    onPressed: togglePasswordVisibility,
+                                    icon: Icon(
+                                      isPasswordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                  ),
+                                ),
+                                obscureText: !isPasswordVisible,
+                                validator: validPassword,
+                                onEditingComplete: () {
+                                  if (formKey.currentState!.validate()) {
+                                    register();
+                                  }
+                                },
+                              ),
+                              TextFormField(
+                                controller: confirmPasswordController,
+                                decoration: InputDecoration(
+                                  labelText: 'Confirm Password',
+                                  suffixIcon: IconButton(
+                                    onPressed: togglePasswordVisibility,
+                                    icon: Icon(
+                                      isPasswordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                  ),
+                                ),
+                                onEditingComplete: () {
+                                  if (formKey.currentState!.validate()) {
+                                    register();
+                                  }
+                                },
+                                obscureText: !isPasswordVisible,
+                                validator: validConfirmPassword,
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: UiButton(
+                                    text: 'Register',
+                                    icon: Icons.person_add,
+                                    onPressed: () async {
+                                      if (formKey.currentState!.validate()) {
+                                        await register();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                  if (isVerifyCodeVisible) ...[
+                    Text('Verify Code', style: theme.textTheme.displaySmall),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            TextFormField(
-                              controller: displayNameController,
-                              decoration: InputDecoration(
-                                labelText: 'Display Name',
-                              ),
-                              validator: validDisplayName,
-                            ),
-                            TextFormField(
-                              controller: emailController,
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                              ),
-                              validator: validEmail,
-                            ),
-                            TextFormField(
-                              controller: passwordController,
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                suffixIcon: IconButton(
-                                  onPressed: togglePasswordVisibility,
-                                  icon: Icon(
-                                    isPasswordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
+                            Form(
+                              key: formKey,
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    controller: verifyCodeController,
+                                    focusNode: verifyCodeFocusNode,
+                                    validator: validVerifyCode,
+                                    onEditingComplete: () {
+                                      if (formKey.currentState!.validate()) {
+                                        verifyCode();
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      labelText: 'Verify Code',
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                              obscureText: !isPasswordVisible,
-                              validator: validPassword,
-                            ),
-                            TextFormField(
-                              controller: confirmPasswordController,
-                              decoration: InputDecoration(
-                                labelText: 'Confirm Password',
-                                suffixIcon: IconButton(
-                                  onPressed: togglePasswordVisibility,
-                                  icon: Icon(
-                                    isPasswordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                ),
-                              ),
-                              obscureText: !isPasswordVisible,
-                              validator: validConfirmPassword,
                             ),
                             Align(
                               alignment: Alignment.centerRight,
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 16.0),
                                 child: UiButton(
-                                  text: 'Login',
-                                  icon: Icons.login,
-                                  onPressed: () async {
-                                    if (formKey.currentState!.validate()) {
-                                      await register();
-                                    }
-                                  },
+                                  text: 'Verify Code',
+                                  icon: Icons.check,
+                                  onPressed: verifyCode,
                                 ),
                               ),
                             ),
@@ -238,7 +346,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),

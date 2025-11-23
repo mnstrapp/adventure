@@ -142,6 +142,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           children: [
                             TextFormField(
                               controller: emailController,
+                              onEditingComplete: () {
+                                if (formKey.currentState!.validate()) {
+                                  login();
+                                }
+                              },
                               decoration: InputDecoration(
                                 labelText: 'Email',
                               ),
@@ -149,6 +154,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                             TextFormField(
                               controller: passwordController,
+                              onEditingComplete: () {
+                                if (formKey.currentState!.validate()) {
+                                  login();
+                                }
+                              },
                               decoration: InputDecoration(
                                 labelText: 'Password',
                                 suffixIcon: IconButton(
