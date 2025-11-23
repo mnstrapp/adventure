@@ -8,6 +8,7 @@ import '../main/menu.dart';
 import '../ui/scaffold.dart';
 import '../theme.dart';
 import '../main/auth_providers.dart';
+import 'forgot_password.dart';
 import 'register.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -222,7 +223,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 theme.colorScheme.onPrimaryContainer,
                           ),
                           onPressed: () {
-                            // TODO: Implement forgot password functionality
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgotPasswordScreen(),
+                              ),
+                            );
                           },
                         ),
                         UiButton.secondary(

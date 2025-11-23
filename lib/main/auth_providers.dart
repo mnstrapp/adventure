@@ -46,6 +46,8 @@ class SessionNotifier extends Notifier<Session?> {
   }
 
   Future<String?> logout() async {
+    if (state == null) return null;
+
     final client = adventurers.SessionServiceClient(createGrpcChannel());
     try {
       await client.logout(adventurers.LogoutRequest(token: state!.token));
@@ -93,6 +95,39 @@ class SessionNotifier extends Notifier<Session?> {
       return (success, null);
     } catch (e) {
       debugPrint('Failed to verify email: $e');
+      return (false, e.toString());
+    }
+  }
+
+  Future<(bool, String?)> forgotPassword({
+    required String email,
+  }) async {
+    final client = adventurers.SessionServiceClient(createGrpcChannel());
+    try {
+      final response = await client.forgotPassword(
+        adventurers.ForgotPasswordRequest(email: email),
+      );
+      final success = response.success;
+      return (success, null);
+    } catch (e) {
+      debugPrint('Failed to forgot password: $e');
+      return (false, e.toString());
+    }
+  }
+
+  Future<(bool, String?)> resetPassword({
+    required String code,
+    required String password,
+  }) async {
+    final client = adventurers.SessionServiceClient(createGrpcChannel());
+    try {
+      final response = await client.resetPassword(
+        adventurers.ResetPasswordRequest(code: code, password: password),
+      );
+      final success = response.success;
+      return (success, null);
+    } catch (e) {
+      debugPrint('Failed to reset password: $e');
       return (false, e.toString());
     }
   }
